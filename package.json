@@ -2,12 +2,24 @@
   "name": "pi-dev",
   "version": "1.0.0",
   "description": "Personal pi toolkit for daily development — skills, prompts, and extensions",
-  "keywords": ["pi-package"],
+  "keywords": [
+    "pi-package"
+  ],
   "author": "fanjunjie",
   "license": "MIT",
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
   "pi": {
-    "skills": ["./skills"],
-    "prompts": ["./prompts"],
-    "extensions": ["./extensions"]
-  }
+    "extensions": [
+      "./extensions",
+      "node_modules/pi-rewind/src/index.ts"
+    ]
+  },
+  "dependencies": {
+    "pi-rewind": "^0.5.0"
+  },
+  "bundledDependencies": [
+    "pi-rewind"
+  ]
 }
