@@ -1,0 +1,13 @@
+{
+  "name": "pi-dev",
+  "version": "1.0.0",
+  "description": "Personal pi toolkit for daily development — skills, prompts, and extensions",
+  "keywords": ["pi-package"],
+  "author": "fanjunjie",
+  "license": "MIT",
+  "pi": {
+    "skills": ["./skills"],
+    "prompts": ["./prompts"],
+    "extensions": ["./extensions"]
+  }
+}
