@@ -13,13 +13,16 @@
   "pi": {
     "extensions": [
       "./extensions",
-      "node_modules/pi-rewind/src/index.ts"
+      "node_modules/pi-rewind/src/index.ts",
+      "node_modules/pi-web-access/index.ts"
     ]
   },
   "dependencies": {
-    "pi-rewind": "^0.5.0"
+    "pi-rewind": "^0.5.0",
+    "pi-web-access": "^0.10.7"
   },
   "bundledDependencies": [
-    "pi-rewind"
+    "pi-rewind",
+    "pi-web-access"
   ]
 }
