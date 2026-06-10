@@ -6,10 +6,11 @@
 
 ```
 pi-dev/
-├── extensions/          # 自定义扩展（TypeScript）
-├── skills/              # 本地技能（按需放置）
-├── prompts/             # 提示模板（Markdown）
-├── themes/              # 主题（可选）
+├── .pi/                 # 项目级 pi 配置（开发时自动加载）
+│   ├── extensions/      # 自定义扩展（TypeScript）
+│   ├── skills/          # 本地技能（按需放置）
+│   ├── prompts/         # 提示模板（Markdown）
+│   └── themes/          # 主题（可选）
 ├── scripts/
 │   └── setup-skills.js  # postinstall：自动安装外部 git skills
 ├── package.json         # pi-package 配置
@@ -30,12 +31,12 @@ pi-dev/
 
 ### 添加 Extension
 
-1. 在 `extensions/` 下创建 `.ts` 文件
-2. 在 `package.json` 的 `pi.extensions` 中追加路径：
+1. 在 `.pi/extensions/` 下创建 `.ts` 文件
+2. 在 `package.json` 的 `pi.extensions` 中追加路径（开发时 pi 也会自动扫描 `.pi/extensions/`）：
    ```json
    "extensions": [
-     "./extensions",
-     "./extensions/my-new-ext.ts",
+     "./.pi/extensions",
+     "./.pi/extensions/my-new-ext.ts",
      "..."
    ]
    ```
@@ -45,8 +46,8 @@ pi-dev/
 
 #### 方式一：本地 Skill（随项目）
 
-1. 在 `skills/` 下创建子目录，内含 `SKILL.md`
-2. 确保 `package.json` 的 `pi.skills` 包含 `"./skills"`
+1. 在 `.pi/skills/` 下创建子目录，内含 `SKILL.md`
+2. 确保 `package.json` 的 `pi.skills` 包含 `"./.pi/skills"`
 3. 重启 pi
 
 #### 方式二：npm pi-package Skill（推荐标准包）
@@ -71,13 +72,13 @@ pi-dev/
 
 ### 添加 Prompt Template
 
-1. 在 `prompts/` 下创建 `.md` 文件
-2. pi 会自动从 `prompts/` 目录扫描加载
+1. 在 `.pi/prompts/` 下创建 `.md` 文件
+2. pi 会自动从 `.pi/prompts/` 目录扫描加载
 
 ### 添加 Theme
 
-1. 在 `themes/` 下创建主题文件
-2. pi 会自动从 `themes/` 目录扫描加载
+1. 在 `.pi/themes/` 下创建主题文件
+2. pi 会自动从 `.pi/themes/` 目录扫描加载
 
 ## 依赖管理规范
 

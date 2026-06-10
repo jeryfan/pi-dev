@@ -12,15 +12,21 @@
   },
   "pi": {
     "extensions": [
-      "./extensions",
+      "./.pi/extensions",
       "node_modules/pi-rewind/src/index.ts",
       "node_modules/pi-web-access/index.ts",
       "node_modules/pi-superpowers/extensions/plan-tracker.ts"
     ],
     "skills": [
-      "./skills",
+      "./.pi/skills",
       "node_modules/pi-playwright/skills",
       "node_modules/pi-superpowers/skills"
+    ],
+    "prompts": [
+      "./.pi/prompts"
+    ],
+    "themes": [
+      "./.pi/themes"
     ]
   },
   "dependencies": {
