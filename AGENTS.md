@@ -138,3 +138,9 @@ npm run postinstall
 - `pi-web-access` 默认配置 `workflow: "none"`（在 `~/.pi/web-search.json`），搜索时不打开浏览器策展器
 - `pi-playwright` 默认无头模式，需要可视化时加 `--headed`
 - 外部 skills 通过 `~/.agents/skills/` 全局共享，所有 pi 项目都能复用
+
+## Agent 行为规范（必读）
+
+- **在未明确要求提交代码时，不要自主执行 `git commit` 或 `git push`**。
+- 修改文件后，先向用户展示改动摘要，等待明确指令（如"提交"、"push"、"commit"）再执行版本控制操作。
+- `git add` 等本地 staging 操作也应在用户确认后进行，除非用户已明确授权批量提交。
