@@ -16,16 +16,19 @@
       "node_modules/pi-rewind/src/index.ts",
       "node_modules/pi-web-access/index.ts",
       "node_modules/pi-superpowers/extensions/plan-tracker.ts",
-      "node_modules/context-mode/build/adapters/pi/extension.js"
+      "node_modules/context-mode/build/adapters/pi/extension.js",
+      "node_modules/pi-subagents/src/extension/index.ts"
     ],
     "skills": [
       "./.pi/skills",
       "node_modules/pi-playwright/skills",
       "node_modules/pi-superpowers/skills",
-      "node_modules/context-mode/skills"
+      "node_modules/context-mode/skills",
+      "node_modules/pi-subagents/skills"
     ],
     "prompts": [
-      "./.pi/prompts"
+      "./.pi/prompts",
+      "node_modules/pi-subagents/prompts"
     ],
     "themes": [
       "./.pi/themes"
@@ -35,6 +38,7 @@
     "context-mode": "^1.0.162",
     "pi-playwright": "^0.1.1",
     "pi-rewind": "^0.5.0",
+    "pi-subagents": "^0.28.0",
     "pi-superpowers": "^0.2.0",
     "pi-web-access": "^0.10.7"
   },
@@ -43,7 +47,8 @@
     "pi-web-access",
     "pi-playwright",
     "pi-superpowers",
-    "context-mode"
+    "context-mode",
+    "pi-subagents"
   ],
   "scripts": {
     "postinstall": "node scripts/setup-skills.js"
