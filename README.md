@@ -1,6 +1,22 @@
 # pi-dev
 
-个人 pi 开发工具包。
+个人 pi 开发工具包，统一管理扩展、技能、提示模板和第三方包。
+
+## 项目结构
+
+```
+pi-dev/
+├── .pi/                 # 项目级 pi 配置
+│   ├── extensions/      # 自定义扩展
+│   ├── skills/          # 本地技能
+│   ├── prompts/         # 提示模板
+│   └── themes/          # 主题
+├── scripts/
+│   └── setup-skills.js  # postinstall：安装外部 git skills、同步 MCP 配置等
+├── package.json         # pi-package 配置
+├── AGENTS.md            # 通用个人 pi 环境指南（安装后复制到 ~/.pi/agent/AGENTS.md）
+└── README.md            # 本文件
+```
 
 ## 包含能力
 
@@ -10,11 +26,32 @@
 | 网页搜索/抓取 | [pi-web-access](https://github.com/nicobailon/pi-web-access) | `web_search`、`fetch_content`、`code_search` |
 | 浏览器自动化 | [pi-playwright](https://github.com/guwidoe/pi-playwright) | 操作浏览器、截图、填表、自动化测试 |
 | Chrome 控制 | [pi-chrome](https://github.com/tianrendong/pi-chrome) | 控制你的真实 Chrome 实例，复用登录态 |
+| MCP 工具桥接 | [pi-mcp-adapter](https://github.com/nicobailon/pi-mcp-adapter) | 接入 MCP 服务器，如 chrome-devtools-mcp |
+| 工作流技能 | [pi-superpowers](https://github.com/coctostan/pi-superpowers) | Brainstorming / Planning / TDD / Debug / Review |
+| UI/UX 设计智能 | [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 外部 git skill，全局共享 |
 
 ## 安装
 
 ```bash
 pi install git:github.com/jeryfan/pi-dev
+```
+
+## 本地调试
+
+```bash
+pi install /Users/fanjunjie/Documents/repositories/personal/pi-dev
+```
+
+## 项目级安装
+
+```bash
+pi install -l git:github.com/jeryfan/pi-dev
+```
+
+## 更新
+
+```bash
+pi update git:github.com/jeryfan/pi-dev
 ```
 
 ## 首次使用准备
@@ -64,22 +101,21 @@ npx playwright install chromium
 
 > 注意：`/chrome authorize` 控制的是你日常使用的真实 Chrome 浏览器，包含登录态和敏感数据。默认 15 分钟是为了防止 agent 在你不知情的情况下长期操作浏览器。关闭 pi 会话后授权失效。
 
-## 本地调试
+### 4. 使用 MCP 工具
 
-```bash
-pi install /Users/fanjunjie/Documents/repositories/personal/pi-dev
+安装 `pi-dev` 后，`pi-mcp-adapter` 会自动读取 `~/.pi/agent/mcp.json` 中同步的配置（如 `chrome-devtools-mcp`）。
+
+调用示例：
+
+```
+用 chrome-devtools 打开 https://example.com 并截图
 ```
 
-## 项目级安装
+查看 MCP 状态：
 
-```bash
-pi install -l git:github.com/jeryfan/pi-dev
 ```
-
-## 更新
-
-```bash
-pi update git:github.com/jeryfan/pi-dev
+/mcp
+/mcp tools
 ```
 
 ## 配置说明
@@ -87,7 +123,84 @@ pi update git:github.com/jeryfan/pi-dev
 - `workflow: "none"` — `pi-web-access` 搜索时不打开浏览器策展器，直接返回文本结果
 - 如需开启策展器：`/curator on`
 
+## 添加新组件
+
+### 添加 Extension
+
+1. 在 `.pi/extensions/` 下创建 `.ts` 文件
+2. 在 `package.json` 的 `pi.extensions` 中追加路径
+3. 重启 pi
+
+### 添加 Skill
+
+#### 本地 Skill
+
+1. 在 `.pi/skills/` 下创建子目录，内含 `SKILL.md`
+2. 确保 `package.json` 的 `pi.skills` 包含 `"./.pi/skills"`
+3. 重启 pi
+
+#### npm pi-package Skill
+
+1. `npm install <package>`
+2. 在 `package.json` 的 `pi.skills` 中追加 `node_modules/<pkg>/skills`
+3. 同时加入 `dependencies` 和 `bundledDependencies`
+
+#### 外部 Git Skill
+
+1. 编辑 `scripts/setup-skills.js`，在 `externalSkills` 数组中添加：
+   ```js
+   {
+     name: 'skill-name',
+     repo: 'https://github.com/user/repo.git',
+     sourceSubdir: 'path/to/skill/inside/repo',
+   }
+   ```
+2. 运行 `npm run postinstall`
+3. 脚本会自动 `git clone` 到 `~/.pi/.external-skills/`，并软链接到 `~/.agents/skills/`
+4. 重启 pi
+
+### 添加 Prompt Template
+
+1. 在 `.pi/prompts/` 下创建 `.md` 文件
+2. pi 会自动从 `.pi/prompts/` 目录扫描加载
+
+### 添加 Theme
+
+1. 在 `.pi/themes/` 下创建主题文件
+2. pi 会自动从 `.pi/themes/` 目录扫描加载
+
+## 依赖管理规范
+
+### 标准 pi-package
+
+```json
+{
+  "dependencies": {
+    "pi-rewind": "^0.5.0"
+  },
+  "bundledDependencies": [
+    "pi-rewind"
+  ]
+}
+```
+
+- 用 `^` 版本号允许小版本自动更新
+- 加入 `bundledDependencies` 便于离线分发
+
+### 外部 Git Skill 缓存
+
+- Git 仓库：`~/.pi/.external-skills/<name>/`
+- Skill 软链接：`~/.agents/skills/<name>/`
+
+这两个目录**不属于本项目**，不要提交到 git。
+
 ## 环境依赖
 
 - Node.js >= 20
 - Chromium（由 `npx playwright install chromium` 自动安装）
+
+## Agent 行为规范（必读）
+
+- **在未明确要求提交代码时，不要自主执行 `git commit` 或 `git push`**。
+- 修改文件后，先向用户展示改动摘要，等待明确指令再执行版本控制操作。
+- `git add` 等本地 staging 操作也应在用户确认后进行，除非用户已明确授权批量提交。

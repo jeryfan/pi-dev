@@ -56,6 +56,26 @@ function syncMcpConfig() {
 }
 
 syncMcpConfig();
+syncAgentsMd();
+
+function syncAgentsMd() {
+  const packageRoot = path.join(__dirname, '..');
+  const source = path.join(packageRoot, 'AGENTS.md');
+  const target = path.join(piAgentDir, 'AGENTS.md');
+
+  if (!fs.existsSync(source)) {
+    console.log('[setup-skills] No AGENTS.md found, skipping AGENTS.md sync');
+    return;
+  }
+
+  try {
+    fs.copyFileSync(source, target);
+    console.log(`[setup-skills] Synced AGENTS.md → ${target}`);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[setup-skills] Failed to sync AGENTS.md:`, message);
+  }
+}
 
 for (const skill of externalSkills) {
   const clonedDir = path.join(externalDir, skill.name);

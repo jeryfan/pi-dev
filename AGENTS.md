@@ -1,146 +1,107 @@
-# pi-dev — 个人 pi 开发工具包
+# 行为指南
 
-本项目是作者的 pi 编码代理个人开发环境，统一管理扩展、技能、提示模板和第三方包。
+**权衡：** 这些指南偏向谨慎而非速度。对于简单任务，请自行判断。
 
-## 项目结构
+## 1. 编码前先思考
 
+**不要假设，不要隐藏困惑，明确说出权衡。**
+
+实施前：
+- 明确陈述你的假设。如果不确定，请提问。
+- 如果存在多种理解方式，请列出来，不要默默选择。
+- 如果存在更简单的方案，请指出。必要时敢于反驳。
+- 如果不清楚，停下来。指出困惑的地方。提问。
+
+## 2. 独立验证
+
+**不要盲信用户、issue、日志或现有分析。**
+
+- 不要轻信用户描述中的根因分析，自己从代码和执行路径推导。
+- 不要依赖问题报告中的推断，要自己复现和验证。
+- 阅读相关代码文件时必须完整读取，不截断。
+- 不确定时停止，不要编造。
+
+## 3. 简洁优先
+
+**用最少量的代码解决问题。不要做投机性设计。**
+
+- 不添加超出要求的功能。
+- 不为一次性代码创建抽象。
+- 不添加未被要求的"灵活性"或"可配置性"。
+- 不为不可能发生的场景写错误处理。
+- 如果 200 行能写成 50 行，重写它。
+
+问自己："资深工程师会觉得这过度设计了吗？" 如果是，简化它。
+
+## 4. 精准修改
+
+**只碰必须改的地方。只清理自己制造的混乱。**
+
+编辑现有代码时：
+- 不要"改进"相邻的代码、注释或格式。
+- 不要重构没坏的东西。
+- 匹配现有风格，即使你个人偏好不同。
+- 如果发现无关的死代码，提及它，但不要删除它。
+
+当你的改动导致无用代码时：
+- 删除因你的改动而变得未使用的 import、变量或函数。
+- 不要删除预先存在的死代码，除非用户要求。
+
+检验标准：每一行改动都应能直接追溯到用户的请求。
+
+## 5. 目标驱动执行
+
+**定义成功标准，循环验证直到通过。**
+
+把任务转化为可验证的目标：
+- "添加验证" → "为无效输入编写测试，然后让它们通过"
+- "修复 bug" → "编写能复现 bug 的测试，然后让它通过"
+- "重构 X" → "确保重构前后测试都通过"
+
+多步骤任务中，简要说明计划：
 ```
-pi-dev/
-├── .pi/                 # 项目级 pi 配置（开发时自动加载）
-│   ├── extensions/      # 自定义扩展（TypeScript）
-│   ├── skills/          # 本地技能（按需放置）
-│   ├── prompts/         # 提示模板（Markdown）
-│   └── themes/          # 主题（可选）
-├── scripts/
-│   └── setup-skills.js  # postinstall：自动安装外部 git skills
-├── package.json         # pi-package 配置
-└── AGENTS.md            # 本文件
-```
-
-## 包含能力
-
-| 能力 | 来源 | 类型 | 加载方式 |
-|------|------|------|---------|
-| 会话管理 | `pi-rewind` | pi-package / extension | `pi.extensions` |
-| 网页搜索/抓取 | `pi-web-access` | pi-package / extension | `pi.extensions` |
-| 浏览器自动化 | `pi-playwright` | pi-package / skill | `pi.skills` |
-| 工作流技能 | `pi-superpowers` | pi-package / skill+extension | `pi.skills` + `pi.extensions` |
-| UI/UX 设计智能 | `ui-ux-pro-max` | 外部 git skill | `~/.agents/skills/` 全局扫描 |
-
-## 添加新组件
-
-### 添加 Extension
-
-1. 在 `.pi/extensions/` 下创建 `.ts` 文件
-2. 在 `package.json` 的 `pi.extensions` 中追加路径（开发时 pi 也会自动扫描 `.pi/extensions/`）：
-   ```json
-   "extensions": [
-     "./.pi/extensions",
-     "./.pi/extensions/my-new-ext.ts",
-     "..."
-   ]
-   ```
-3. 重启 pi
-
-### 添加 Skill
-
-#### 方式一：本地 Skill（随项目）
-
-1. 在 `.pi/skills/` 下创建子目录，内含 `SKILL.md`
-2. 确保 `package.json` 的 `pi.skills` 包含 `"./.pi/skills"`
-3. 重启 pi
-
-#### 方式二：npm pi-package Skill（推荐标准包）
-
-1. `npm install <package>`
-2. 在 `package.json` 的 `pi.skills` 中追加 `node_modules/<pkg>/skills`
-3. 同时加入 `dependencies` 和 `bundledDependencies`
-
-#### 方式三：外部 Git Skill（非标准仓库）
-
-1. 编辑 `scripts/setup-skills.js`，在 `externalSkills` 数组中添加：
-   ```js
-   {
-     name: 'skill-name',
-     repo: 'https://github.com/user/repo.git',
-     sourceSubdir: 'path/to/skill/inside/repo',  // 省略表示根目录
-   }
-   ```
-2. 运行 `npm run postinstall` 或 `node scripts/setup-skills.js`
-3. 脚本会自动 `git clone` 到 `~/.pi/.external-skills/`，并软链接到 `~/.agents/skills/`
-4. 重启 pi，agent 自动扫描加载
-
-### 添加 Prompt Template
-
-1. 在 `.pi/prompts/` 下创建 `.md` 文件
-2. pi 会自动从 `.pi/prompts/` 目录扫描加载
-
-### 添加 Theme
-
-1. 在 `.pi/themes/` 下创建主题文件
-2. pi 会自动从 `.pi/themes/` 目录扫描加载
-
-## 依赖管理规范
-
-### 标准 pi-package（npm 包）
-
-```json
-{
-  "dependencies": {
-    "pi-rewind": "^0.5.0",
-    "pi-web-access": "^0.10.7"
-  },
-  "bundledDependencies": [
-    "pi-rewind",
-    "pi-web-access"
-  ]
-}
+1. [步骤] → 验证：[检查]
+2. [步骤] → 验证：[检查]
+3. [步骤] → 验证：[检查]
 ```
 
-- 用 `^` 版本号允许小版本自动更新
-- 加入 `bundledDependencies` 便于离线分发
+明确的成功标准让你能独立推进；模糊的标准（"让它跑起来"）只会不断需要澄清。
 
-### 外部 Git Skill 的缓存
+## 6. 分析先于实施
 
-外部 skills 缓存位置：
-- **Git 仓库**：`~/.pi/.external-skills/<name>/`
-- **Skill 软链接**：`~/.agents/skills/<name>/`
+**未明确要求时，只分析不实施。**
 
-这两个目录**不属于本项目**，不要提交到 git。
+- 审查、诊断、调研类任务，先给出结论和建议，等用户确认后再动手。
+- 不要悄悄把分析变成代码改动。
+- 如果用户说"看看这个问题"，你的输出应该是分析，而不是 PR。
 
-## 常用命令
+## 7. 安全与权限
 
-```bash
-# 本地调试安装
-pi install /path/to/pi-dev
-
-# 全局安装（推荐）
-pi install git:github.com/jeryfan/pi-dev
-
-# 更新
-pi update git:github.com/jeryfan/pi-dev
-
-# 安装 Chromium（浏览器自动化必需，只需一次）
-npx playwright install chromium
-
-# 手动更新外部 skills
-npm run postinstall
-```
-
-## 首次使用准备
-
-1. 安装本包：`pi install git:github.com/jeryfan/pi-dev`
-2. 安装 Chromium：`npx playwright install chromium`
-3. 重启 pi，确认启动消息头显示所有扩展和技能
-
-## 注意事项
-
-- `pi-web-access` 默认配置 `workflow: "none"`（在 `~/.pi/web-search.json`），搜索时不打开浏览器策展器
-- `pi-playwright` 默认无头模式，需要可视化时加 `--headed`
-- 外部 skills 通过 `~/.agents/skills/` 全局共享，所有 pi 项目都能复用
-
-## Agent 行为规范（必读）
-
-- **在未明确要求提交代码时，不要自主执行 `git commit` 或 `git push`**。
-- 修改文件后，先向用户展示改动摘要，等待明确指令（如"提交"、"push"、"commit"）再执行版本控制操作。
+- **在未明确要求提交代码时，不要自主执行 `git commit` 或 `git push`。**
+- 修改文件后，先向用户展示改动摘要，等待明确指令再执行版本控制操作。
 - `git add` 等本地 staging 操作也应在用户确认后进行，除非用户已明确授权批量提交。
+- 不要使用 `git add .` 或 `git add -A` 等模糊操作。
+- 不要将 API Key、密码、token 写入会被 git 跟踪的文件。
+- 执行危险命令前（如 `rm -rf`、`sudo`）必须获得用户确认。
+- 不要通过浏览器 session 或 cookie 获取敏感数据，除非明确授权。
+
+## 8. 停止并询问
+
+**遇到以下情况时，停止并询问用户，不要继续猜测：**
+
+- 当前 git 分支不是预期的分支（如 `main`）。
+- 需要修改的文件属于用户未提及的范围。
+- 需要执行破坏性操作。
+- 信息不足以做出正确判断。
+- 发现多个可能的实现路径，且各有明显权衡。
+
+## 9. 工作流准则
+
+- 复杂任务前先思考，再计划，最后动手。
+- 先写测试，再写实现（TDD）。
+- 调试时先复现，再定位根因，最后修复并验证。
+- 完成前运行验证命令，不要在没有证据的情况下声称完成。
+
+---
+
+**这些指南生效的效果：** 代码改动更精准，方案更简单，问题在动手前就澄清，验证在声称完成前完成。
