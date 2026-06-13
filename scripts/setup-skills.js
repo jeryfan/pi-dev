@@ -9,9 +9,12 @@ const home = os.homedir();
 const externalDir = path.join(home, '.pi', '.external-skills');
 // pi 官方全局 skill 扫描目录（pi 自动发现，与 ~/.pi/agent/skills/ 同级）
 const globalSkillsDir = path.join(home, '.agents', 'skills');
+// pi 全局 agent 配置目录
+const piAgentDir = path.join(home, '.pi', 'agent');
 
 fs.mkdirSync(externalDir, { recursive: true });
 fs.mkdirSync(globalSkillsDir, { recursive: true });
+fs.mkdirSync(piAgentDir, { recursive: true });
 
 // 配置需要自动安装的非标准 skill（git 仓库）
 const externalSkills = [
@@ -21,6 +24,38 @@ const externalSkills = [
     sourceSubdir: '.claude/skills/ui-ux-pro-max',
   },
 ];
+
+// 同步 MCP 配置到全局，使安装 pi-dev 后任意项目都能使用 MCP 工具
+function syncMcpConfig() {
+  const packageRoot = path.join(__dirname, '..');
+  const sourcePaths = [
+    path.join(packageRoot, '.pi', 'mcp.json'),
+    path.join(piAgentDir, 'mcp.json'),
+  ];
+
+  const source = sourcePaths.find((p) => fs.existsSync(p));
+  if (!source) {
+    console.log('[setup-skills] No mcp.json found, skipping MCP config sync');
+    return;
+  }
+
+  const target = path.join(piAgentDir, 'mcp.json');
+
+  try {
+    // 读取 pi-dev 提供的配置
+    const newRaw = fs.readFileSync(source, 'utf-8');
+    const newConfig = JSON.parse(newRaw);
+
+    // 以 pi-dev 中的配置为主，直接覆盖全局配置
+    fs.writeFileSync(target, JSON.stringify(newConfig, null, 2) + '\n');
+    console.log(`[setup-skills] Synced MCP config → ${target}`);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[setup-skills] Failed to sync MCP config:`, message);
+  }
+}
+
+syncMcpConfig();
 
 for (const skill of externalSkills) {
   const clonedDir = path.join(externalDir, skill.name);
