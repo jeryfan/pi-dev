@@ -15,7 +15,8 @@
       "./.pi/extensions",
       "node_modules/pi-rewind/src/index.ts",
       "node_modules/pi-web-access/index.ts",
-      "node_modules/pi-superpowers/extensions/plan-tracker.ts"
+      "node_modules/pi-superpowers/extensions/plan-tracker.ts",
+      "node_modules/pi-chrome/extensions/chrome-profile-bridge/index.ts"
     ],
     "skills": [
       "./.pi/skills",
@@ -30,6 +31,7 @@
     ]
   },
   "dependencies": {
+    "pi-chrome": "^0.15.38",
     "pi-playwright": "^0.1.1",
     "pi-rewind": "^0.5.0",
     "pi-superpowers": "^0.2.0",
@@ -39,15 +41,10 @@
     "pi-rewind",
     "pi-web-access",
     "pi-playwright",
-    "pi-superpowers"
+    "pi-superpowers",
+    "pi-chrome"
   ],
   "scripts": {
     "postinstall": "node scripts/setup-skills.js"
-  },
-  "bundleDependencies": [
-    "pi-rewind",
-    "pi-web-access",
-    "pi-playwright",
-    "pi-superpowers"
-  ]
+  }
 }
