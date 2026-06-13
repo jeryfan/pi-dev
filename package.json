@@ -1,56 +1,71 @@
 {
-  "name": "pi-dev",
-  "version": "1.0.0",
-  "description": "Personal pi toolkit for daily development — skills, prompts, and extensions",
-  "keywords": [
-    "pi-package"
-  ],
-  "author": "fanjunjie",
-  "license": "MIT",
-  "peerDependencies": {
-    "@earendil-works/pi-coding-agent": "*"
-  },
-  "pi": {
-    "extensions": [
-      "./.pi/extensions",
-      "node_modules/pi-rewind/src/index.ts",
-      "node_modules/pi-web-access/index.ts",
-      "node_modules/pi-superpowers/extensions/plan-tracker.ts",
-      "node_modules/pi-chrome/extensions/chrome-profile-bridge/index.ts",
-      "node_modules/pi-mcp-adapter/index.ts",
-      "node_modules/statusline-pi/dist/index.js"
-    ],
-    "skills": [
-      "./.pi/skills",
-      "node_modules/pi-playwright/skills",
-      "node_modules/pi-superpowers/skills"
-    ],
-    "prompts": [
-      "./.pi/prompts"
-    ],
-    "themes": [
-      "./.pi/themes"
-    ]
-  },
-  "dependencies": {
-    "pi-chrome": "^0.15.38",
-    "pi-mcp-adapter": "^2.9.0",
-    "statusline-pi": "^1.0.0",
-    "pi-playwright": "^0.1.1",
-    "pi-rewind": "^0.5.0",
-    "pi-superpowers": "^0.2.0",
-    "pi-web-access": "^0.10.7"
-  },
-  "bundledDependencies": [
-    "pi-rewind",
-    "pi-web-access",
-    "pi-playwright",
-    "pi-superpowers",
-    "pi-chrome",
-    "pi-mcp-adapter",
-    "statusline-pi"
-  ],
-  "scripts": {
-    "postinstall": "node scripts/setup-skills.js"
-  }
+	"name": "pi-dev",
+	"version": "1.0.0",
+	"description": "Personal pi toolkit for daily development — skills, prompts, and extensions",
+	"keywords": [
+		"pi-package"
+	],
+	"author": "fanjunjie",
+	"license": "MIT",
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": "*"
+	},
+	"pi": {
+		"extensions": [
+			"./.pi/extensions",
+			"node_modules/pi-rewind/src/index.ts",
+			"node_modules/pi-web-access/index.ts",
+			"node_modules/pi-superpowers/extensions/plan-tracker.ts",
+			"node_modules/pi-chrome/extensions/chrome-profile-bridge/index.ts",
+			"node_modules/pi-mcp-adapter/index.ts",
+			"node_modules/statusline-pi/dist/index.js"
+		],
+		"skills": [
+			"./.pi/skills",
+			"node_modules/pi-playwright/skills",
+			"node_modules/pi-superpowers/skills"
+		],
+		"prompts": [
+			"./.pi/prompts"
+		],
+		"themes": [
+			"./.pi/themes"
+		]
+	},
+	"dependencies": {
+		"pi-chrome": "^0.15.38",
+		"pi-mcp-adapter": "^2.9.0",
+		"pi-playwright": "^0.1.1",
+		"pi-rewind": "^0.5.0",
+		"pi-superpowers": "^0.2.0",
+		"pi-web-access": "^0.10.7",
+		"statusline-pi": "^1.0.0"
+	},
+	"bundledDependencies": [
+		"pi-rewind",
+		"pi-web-access",
+		"pi-playwright",
+		"pi-superpowers",
+		"pi-chrome",
+		"pi-mcp-adapter",
+		"statusline-pi"
+	],
+	"scripts": {
+		"postinstall": "node scripts/setup-skills.js",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"format": "biome format --write ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.0"
+	},
+	"bundleDependencies": [
+		"pi-rewind",
+		"pi-web-access",
+		"pi-playwright",
+		"pi-superpowers",
+		"pi-chrome",
+		"pi-mcp-adapter",
+		"statusline-pi"
+	]
 }
