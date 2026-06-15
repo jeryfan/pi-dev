@@ -12,7 +12,7 @@
 	},
 	"pi": {
 		"extensions": [
-			"./.pi/extensions",
+			"./extensions",
 			"node_modules/pi-rewind/src/index.ts",
 			"node_modules/pi-web-access/index.ts",
 			"node_modules/pi-superpowers/extensions/plan-tracker.ts",
@@ -23,17 +23,17 @@
 			"node_modules/pi-subagents/src/extension/index.ts"
 		],
 		"skills": [
-			"./.pi/skills",
+			"./skills",
 			"node_modules/pi-playwright/skills",
 			"node_modules/pi-superpowers/skills",
 			"node_modules/context-mode/skills",
 			"node_modules/pi-subagents/skills"
 		],
 		"prompts": [
-			"./.pi/prompts"
+			"./prompts"
 		],
 		"themes": [
-			"./.pi/themes"
+			"./themes"
 		]
 	},
 	"dependencies": {

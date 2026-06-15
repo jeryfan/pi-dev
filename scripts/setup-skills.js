@@ -34,6 +34,7 @@ const externalSkills = [
 function syncMcpConfig() {
 	const packageRoot = path.join(__dirname, "..");
 	const sourcePaths = [
+		path.join(packageRoot, "mcp.json"),
 		path.join(packageRoot, ".pi", "mcp.json"),
 		path.join(piAgentDir, "mcp.json"),
 	];
