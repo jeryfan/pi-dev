@@ -23,6 +23,11 @@ const externalSkills = [
 		repo: "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
 		sourceSubdir: ".claude/skills/ui-ux-pro-max",
 	},
+	{
+		name: "frontend-design",
+		repo: "https://github.com/anthropics/claude-code.git",
+		sourceSubdir: "plugins/frontend-design/skills/frontend-design",
+	},
 ];
 
 // 同步 MCP 配置到全局，使安装 pi-dev 后任意项目都能使用 MCP 工具
