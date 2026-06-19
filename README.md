@@ -1,24 +1,32 @@
 # pi-dev
 
-个人 pi 开发工具包，统一管理扩展、技能、提示模板和第三方包。
+个人 pi 开发工具包，统一管理扩展、技能、提示模板和第三方包。安装一次，所有 pi 项目共享同一套环境。
 
 ## 项目结构
 
 ```
 pi-dev/
-├── .pi/                 # 项目级 pi 配置
-│   ├── extensions/      # 自定义扩展
-│   ├── skills/          # 本地技能
-│   ├── prompts/         # 提示模板
-│   └── themes/          # 主题
+├── extensions/          # 自定义扩展
+│   ├── clear-command.ts # /clear 命令，快速新建会话
+│   ├── exit-command.ts  # /exit 命令，退出 pi
+│   └── plan-mode/       # /plan 只读探索模式
+│       ├── index.ts
+│       └── utils.ts
+├── skills/              # 本地技能（当前为空，预留）
+├── prompts/             # 提示模板（当前为空，预留）
+├── themes/              # 主题（当前为空，预留）
 ├── scripts/
-│   └── setup-skills.js  # postinstall：安装外部 git skills、同步 MCP 配置等
+│   └── setup-skills.js  # postinstall：同步全局配置、安装外部 git skills
 ├── package.json         # pi-package 配置
-├── AGENTS.md            # 通用个人 pi 环境指南（安装后复制到 ~/.pi/agent/AGENTS.md）
+├── mcp.json             # MCP 服务器配置，同步到 ~/.pi/agent/mcp.json
+├── AGENTS.md            # 通用行为指南，同步到 ~/.pi/agent/AGENTS.md
+├── biome.json           # Biome 格式化与 lint 配置
 └── README.md            # 本文件
 ```
 
 ## 包含能力
+
+### Extensions
 
 | 能力 | 来源 | 说明 |
 |------|------|------|
@@ -28,7 +36,22 @@ pi-dev/
 | Chrome 控制 | [pi-chrome](https://github.com/tianrendong/pi-chrome) | 控制你的真实 Chrome 实例，复用登录态 |
 | MCP 工具桥接 | [pi-mcp-adapter](https://github.com/nicobailon/pi-mcp-adapter) | 接入 MCP 服务器，如 chrome-devtools-mcp |
 | 工作流技能 | [pi-superpowers](https://github.com/coctostan/pi-superpowers) | Brainstorming / Planning / TDD / Debug / Review |
-| UI/UX 设计智能 | [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 外部 git skill，全局共享 |
+| 状态栏 | [statusline-pi](https://github.com/luongnv89/pi-extensions) | 底部显示目录、git 分支、改动、context、模型 |
+| 上下文管理 | [context-mode](https://github.com/mksglu/context-mode) | 沙箱执行、FTS5 知识库、意图搜索 |
+| Subagent 编排 | [pi-subagents](https://github.com/nicobailon/pi-subagents) | 并行/链式 subagent、异步执行 |
+| 目标跟踪 | [pi-agent-goal](https://github.com/KristjanPikhof/Pi-Agent-Goal) | Codex 风格 `/goal` 长期目标工作流 |
+| 自定义命令 | `extensions/` | `/clear`、`/exit`、`/plan` |
+
+### Skills
+
+| 能力 | 来源 | 说明 |
+|------|------|------|
+| UI/UX 设计 | [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 外部 git skill，风格、配色、布局 |
+| 前端设计 | [frontend-design](https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design) | Anthropic 官方，避免 AI slop 审美 |
+| 上下文管理 | context-mode/skills | ctx_* 工具使用指南 |
+| Subagent 使用 | pi-subagents/skills | subagent 编排指南 |
+| Playwright 浏览器 | pi-playwright/skills | 浏览器自动化 skill |
+| 工作流技能 | pi-superpowers/skills | 头脑风暴、计划、TDD、调试、审查 |
 
 ## 安装
 
@@ -118,32 +141,52 @@ npx playwright install chromium
 /mcp tools
 ```
 
+### 5. 使用 Goal 模式
+
+```
+/goal 实现用户登录功能并添加测试
+/goal --start
+```
+
+## 常用命令
+
+| 命令 | 作用 |
+|------|------|
+| `/clear` | 新建会话（同 `/new`） |
+| `/exit` | 退出 pi |
+| `/plan` | 切换 plan mode，只读探索 |
+| `/todos` | 显示当前 plan 进度 |
+| `/goal` | 显示或设置长期目标 |
+| `/mcp` | 查看 MCP 状态 |
+
 ## 配置说明
 
 - `workflow: "none"` — `pi-web-access` 搜索时不打开浏览器策展器，直接返回文本结果
 - 如需开启策展器：`/curator on`
+- `mcp.json` 会覆盖同步到 `~/.pi/agent/mcp.json`
+- `AGENTS.md` 会覆盖同步到 `~/.pi/agent/AGENTS.md`
 
 ## 添加新组件
 
 ### 添加 Extension
 
-1. 在 `.pi/extensions/` 下创建 `.ts` 文件
-2. 在 `package.json` 的 `pi.extensions` 中追加路径
+1. 在 `extensions/` 下创建 `.ts` 文件或子目录
+2. 确保 `package.json` 的 `pi.extensions` 包含 `"./extensions"`
 3. 重启 pi
 
 ### 添加 Skill
 
 #### 本地 Skill
 
-1. 在 `.pi/skills/` 下创建子目录，内含 `SKILL.md`
-2. 确保 `package.json` 的 `pi.skills` 包含 `"./.pi/skills"`
+1. 在 `skills/` 下创建子目录，内含 `SKILL.md`
+2. 确保 `package.json` 的 `pi.skills` 包含 `"./skills"`
 3. 重启 pi
 
 #### npm pi-package Skill
 
 1. `npm install <package>`
 2. 在 `package.json` 的 `pi.skills` 中追加 `node_modules/<pkg>/skills`
-3. 同时加入 `dependencies` 和 `bundledDependencies`
+3. 同时加入 `dependencies` 和 `bundleDependencies`
 
 #### 外部 Git Skill
 
@@ -161,31 +204,38 @@ npx playwright install chromium
 
 ### 添加 Prompt Template
 
-1. 在 `.pi/prompts/` 下创建 `.md` 文件
-2. pi 会自动从 `.pi/prompts/` 目录扫描加载
+1. 在 `prompts/` 下创建 `.md` 文件
+2. pi 会自动从 `prompts/` 目录扫描加载
 
 ### 添加 Theme
 
-1. 在 `.pi/themes/` 下创建主题文件
-2. pi 会自动从 `.pi/themes/` 目录扫描加载
+1. 在 `themes/` 下创建主题文件
+2. pi 会自动从 `themes/` 目录扫描加载
+
+## 开发规范
+
+```bash
+npm run check      # 检查格式和 lint
+npm run check:fix  # 自动修复
+npm run format     # 格式化
+```
 
 ## 依赖管理规范
-
-### 标准 pi-package
 
 ```json
 {
   "dependencies": {
     "pi-rewind": "^0.5.0"
   },
-  "bundledDependencies": [
+  "bundleDependencies": [
     "pi-rewind"
   ]
 }
 ```
 
 - 用 `^` 版本号允许小版本自动更新
-- 加入 `bundledDependencies` 便于离线分发
+- 加入 `bundleDependencies` 便于离线分发
+- 不要使用 `bundledDependencies`，npm 不允许与 `bundleDependencies` 同时存在
 
 ### 外部 Git Skill 缓存
 
@@ -196,10 +246,12 @@ npx playwright install chromium
 
 ## 环境依赖
 
-- Node.js >= 20
+- Node.js >= 22
 - Chromium（由 `npx playwright install chromium` 自动安装）
 
 ## Agent 行为规范（必读）
+
+详见 [`AGENTS.md`](./AGENTS.md)。核心原则：
 
 - **在未明确要求提交代码时，不要自主执行 `git commit` 或 `git push`**。
 - 修改文件后，先向用户展示改动摘要，等待明确指令再执行版本控制操作。
