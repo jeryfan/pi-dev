@@ -154,6 +154,7 @@ npx playwright install chromium
 |------|------|
 | `/clear` | 新建会话（同 `/new`） |
 | `/exit` | 退出 pi |
+| `/clean` | 清理 pi 全局资源（skills、extensions、prompts、themes、configs、sessions） |
 | `/plan` | 切换 plan mode，只读探索 |
 | `/todos` | 显示当前 plan 进度 |
 | `/goal` | 显示或设置长期目标 |
@@ -167,6 +168,32 @@ npx playwright install chromium
 - `AGENTS.md` 会覆盖同步到 `~/.pi/agent/AGENTS.md`
 
 ## 添加新组件
+
+### Clean 命令
+
+`/clean` 用于清理 pi 全局资源，支持以下选项：
+
+```bash
+/clean              # 交互式选择清理范围
+/clean --all        # 清理全部（skills、extensions、prompts、themes、configs、sessions）
+/clean --dry-run    # 仅预览，不真正删除
+/clean --yes        # 跳过确认（慎用）
+/clean --configs --sessions   # 同时清理指定范围
+```
+
+默认清理范围（不带 `--all` 或具体 `--<scope>` 时）：
+
+- Skills：`~/.agents/skills/` 全局 skill 链接/目录 + `~/.pi/.external-skills/` 外部 git 缓存
+- Extensions：`~/.pi/agent/extensions/`
+- Prompts：`~/.pi/agent/prompts/`
+- Themes：`~/.pi/agent/themes/`
+
+可选范围：
+
+- `--configs`：`~/.pi/agent/mcp.json`、`AGENTS.md`、`settings.json`、`trust.json`、`models.json`
+- `--sessions`：`~/.pi/agent/sessions/`
+
+> 注意：`/clean` 会删除全局资源，不会删除当前项目文件。执行前会要求确认（`--yes` 可跳过）。
 
 ### 添加 Extension
 
