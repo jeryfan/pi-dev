@@ -17,6 +17,8 @@ fs.mkdirSync(globalSkillsDir, { recursive: true });
 fs.mkdirSync(piAgentDir, { recursive: true });
 
 // 配置需要自动安装的非标准 skill（git 仓库）
+// - 单 skill：{ name, repo, sourceSubdir }
+// - 同一仓库多 skill：{ name（仓库本地目录名）, repo, skills: [{ name（链接名）, sourceSubdir }] }
 const externalSkills = [
 	{
 		name: "ui-ux-pro-max",
@@ -27,6 +29,25 @@ const externalSkills = [
 		name: "frontend-design",
 		repo: "https://github.com/anthropics/claude-code.git",
 		sourceSubdir: "plugins/frontend-design/skills/frontend-design",
+	},
+	{
+		name: "taste-skill",
+		repo: "https://github.com/Leonxlnx/taste-skill.git",
+		skills: [
+			{ name: "brandkit", sourceSubdir: "skills/brandkit" },
+			{ name: "design-taste-frontend", sourceSubdir: "skills/taste-skill" },
+			{ name: "design-taste-frontend-v1", sourceSubdir: "skills/taste-skill-v1" },
+			{ name: "full-output-enforcement", sourceSubdir: "skills/output-skill" },
+			{ name: "gpt-taste", sourceSubdir: "skills/gpt-tasteskill" },
+			{ name: "high-end-visual-design", sourceSubdir: "skills/soft-skill" },
+			{ name: "image-to-code", sourceSubdir: "skills/image-to-code-skill" },
+			{ name: "imagegen-frontend-mobile", sourceSubdir: "skills/imagegen-frontend-mobile" },
+			{ name: "imagegen-frontend-web", sourceSubdir: "skills/imagegen-frontend-web" },
+			{ name: "industrial-brutalist-ui", sourceSubdir: "skills/brutalist-skill" },
+			{ name: "minimalist-ui", sourceSubdir: "skills/minimalist-skill" },
+			{ name: "redesign-existing-projects", sourceSubdir: "skills/redesign-skill" },
+			{ name: "stitch-design-taste", sourceSubdir: "skills/stitch-skill" },
+		],
 	},
 ];
 
@@ -85,10 +106,11 @@ function syncAgentsMd() {
 
 for (const skill of externalSkills) {
 	const clonedDir = path.join(externalDir, skill.name);
-	const skillSource = skill.sourceSubdir
-		? path.join(clonedDir, skill.sourceSubdir)
-		: clonedDir;
-	const skillLink = path.join(globalSkillsDir, skill.name);
+
+	// 规范化同一仓库下的子 skill 列表（单 skill 配置向后兼容）
+	const subSkills = skill.skills
+		? skill.skills.map((s) => ({ name: s.name, sourceSubdir: s.sourceSubdir ?? "" }))
+		: [{ name: skill.name, sourceSubdir: skill.sourceSubdir ?? "" }];
 
 	// 1. 克隆或更新上游仓库
 	if (fs.existsSync(path.join(clonedDir, ".git"))) {
@@ -114,24 +136,31 @@ for (const skill of externalSkills) {
 		}
 	}
 
-	if (!fs.existsSync(path.join(skillSource, "SKILL.md"))) {
-		console.error(
-			`[setup-skills] ${skill.name}: SKILL.md not found in ${skillSource}`,
-		);
-		continue;
-	}
+	// 2. 为每个子 skill 建立/更新全局软链接
+	for (const sub of subSkills) {
+		const skillSource = sub.sourceSubdir
+			? path.join(clonedDir, sub.sourceSubdir)
+			: clonedDir;
+		const skillLink = path.join(globalSkillsDir, sub.name);
 
-	// 2. 更新全局 skill 软链接
-	if (fs.existsSync(skillLink)) {
-		const stat = fs.lstatSync(skillLink);
-		if (stat.isSymbolicLink() || stat.isDirectory()) {
-			fs.rmSync(skillLink, { recursive: true, force: true });
-		} else {
-			fs.unlinkSync(skillLink);
+		if (!fs.existsSync(path.join(skillSource, "SKILL.md"))) {
+			console.error(
+				`[setup-skills] ${sub.name}: SKILL.md not found in ${skillSource}`,
+			);
+			continue;
 		}
-	}
 
-	const type = process.platform === "win32" ? "junction" : "dir";
-	fs.symlinkSync(skillSource, skillLink, type);
-	console.log(`[setup-skills] Linked ${skill.name} → ${skillLink}`);
+		if (fs.existsSync(skillLink)) {
+			const stat = fs.lstatSync(skillLink);
+			if (stat.isSymbolicLink() || stat.isDirectory()) {
+				fs.rmSync(skillLink, { recursive: true, force: true });
+			} else {
+				fs.unlinkSync(skillLink);
+			}
+		}
+
+		const type = process.platform === "win32" ? "junction" : "dir";
+		fs.symlinkSync(skillSource, skillLink, type);
+		console.log(`[setup-skills] Linked ${sub.name} → ${skillLink}`);
+	}
 }
