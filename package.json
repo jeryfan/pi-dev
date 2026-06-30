@@ -38,9 +38,9 @@
     ]
   },
   "dependencies": {
-    "context-mode": "^1.0.162",
+    "context-mode": "^1.0.169",
     "pi-agent-goal": "github:KristjanPikhof/Pi-Agent-Goal",
-    "pi-chrome": "^0.15.38",
+    "pi-chrome": "^0.15.43",
     "pi-mcp-adapter": "^2.10.0",
     "pi-playwright": "^0.1.1",
     "pi-rewind": "^0.5.0",
@@ -56,7 +56,7 @@
     "format": "biome format --write ."
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0"
+    "@biomejs/biome": "^2.5.1"
   },
   "bundleDependencies": [
     "pi-rewind",
