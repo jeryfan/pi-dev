@@ -19,7 +19,6 @@
       "node_modules/pi-chrome/extensions/chrome-profile-bridge/index.ts",
       "node_modules/pi-mcp-adapter/index.ts",
       "node_modules/statusline-pi/dist/index.js",
-      // "node_modules/context-mode/build/adapters/pi/extension.js",
       "node_modules/pi-subagents/src/extension/index.ts",
       "node_modules/pi-agent-goal/extensions/index.ts"
     ],
@@ -27,7 +26,6 @@
       "./skills",
       "node_modules/pi-playwright/skills",
       "node_modules/pi-superpowers/skills",
-      // "node_modules/context-mode/skills",
       "node_modules/pi-subagents/skills"
     ],
     "prompts": [
@@ -38,7 +36,6 @@
     ]
   },
   "dependencies": {
-    // "context-mode": "^1.0.169",
     "pi-agent-goal": "github:KristjanPikhof/Pi-Agent-Goal",
     "pi-chrome": "^0.15.43",
     "pi-mcp-adapter": "^2.10.0",
@@ -66,7 +63,6 @@
     "pi-chrome",
     "pi-mcp-adapter",
     "statusline-pi",
-    // "context-mode",
     "pi-subagents",
     "pi-agent-goal"
   ]
