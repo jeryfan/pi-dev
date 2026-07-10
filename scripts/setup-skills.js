@@ -36,16 +36,31 @@ const externalSkills = [
 		skills: [
 			{ name: "brandkit", sourceSubdir: "skills/brandkit" },
 			{ name: "design-taste-frontend", sourceSubdir: "skills/taste-skill" },
-			{ name: "design-taste-frontend-v1", sourceSubdir: "skills/taste-skill-v1" },
+			{
+				name: "design-taste-frontend-v1",
+				sourceSubdir: "skills/taste-skill-v1",
+			},
 			{ name: "full-output-enforcement", sourceSubdir: "skills/output-skill" },
 			{ name: "gpt-taste", sourceSubdir: "skills/gpt-tasteskill" },
 			{ name: "high-end-visual-design", sourceSubdir: "skills/soft-skill" },
 			{ name: "image-to-code", sourceSubdir: "skills/image-to-code-skill" },
-			{ name: "imagegen-frontend-mobile", sourceSubdir: "skills/imagegen-frontend-mobile" },
-			{ name: "imagegen-frontend-web", sourceSubdir: "skills/imagegen-frontend-web" },
-			{ name: "industrial-brutalist-ui", sourceSubdir: "skills/brutalist-skill" },
+			{
+				name: "imagegen-frontend-mobile",
+				sourceSubdir: "skills/imagegen-frontend-mobile",
+			},
+			{
+				name: "imagegen-frontend-web",
+				sourceSubdir: "skills/imagegen-frontend-web",
+			},
+			{
+				name: "industrial-brutalist-ui",
+				sourceSubdir: "skills/brutalist-skill",
+			},
 			{ name: "minimalist-ui", sourceSubdir: "skills/minimalist-skill" },
-			{ name: "redesign-existing-projects", sourceSubdir: "skills/redesign-skill" },
+			{
+				name: "redesign-existing-projects",
+				sourceSubdir: "skills/redesign-skill",
+			},
 			{ name: "stitch-design-taste", sourceSubdir: "skills/stitch-skill" },
 		],
 	},
@@ -109,7 +124,10 @@ for (const skill of externalSkills) {
 
 	// 规范化同一仓库下的子 skill 列表（单 skill 配置向后兼容）
 	const subSkills = skill.skills
-		? skill.skills.map((s) => ({ name: s.name, sourceSubdir: s.sourceSubdir ?? "" }))
+		? skill.skills.map((s) => ({
+				name: s.name,
+				sourceSubdir: s.sourceSubdir ?? "",
+			}))
 		: [{ name: skill.name, sourceSubdir: skill.sourceSubdir ?? "" }];
 
 	// 1. 克隆或更新上游仓库

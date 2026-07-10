@@ -11,12 +11,18 @@
  *   /clean --yes        - Skip confirmation (use with caution)
  */
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
-type CleanScope = "skills" | "extensions" | "prompts" | "themes" | "configs" | "sessions";
+type CleanScope =
+	| "skills"
+	| "extensions"
+	| "prompts"
+	| "themes"
+	| "configs"
+	| "sessions";
 
 interface CleanTarget {
 	path: string;
@@ -27,7 +33,8 @@ interface CleanTarget {
 const SCOPES: Record<CleanScope, { label: string; description: string }> = {
 	skills: {
 		label: "Skills",
-		description: "Global skill symlinks (~/.agents/skills) and external git caches (~/.pi/.external-skills)",
+		description:
+			"Global skill symlinks (~/.agents/skills) and external git caches (~/.pi/.external-skills)",
 	},
 	extensions: {
 		label: "Extensions",
@@ -43,7 +50,8 @@ const SCOPES: Record<CleanScope, { label: string; description: string }> = {
 	},
 	configs: {
 		label: "Configs",
-		description: "Synced configs: mcp.json, AGENTS.md, settings.json, trust.json, models.json",
+		description:
+			"Synced configs: mcp.json, AGENTS.md, settings.json, trust.json, models.json",
 	},
 	sessions: {
 		label: "Sessions",
@@ -51,8 +59,20 @@ const SCOPES: Record<CleanScope, { label: string; description: string }> = {
 	},
 };
 
-const ALL_SCOPES: CleanScope[] = ["skills", "extensions", "prompts", "themes", "configs", "sessions"];
-const DEFAULT_SCOPES: CleanScope[] = ["skills", "extensions", "prompts", "themes"];
+const ALL_SCOPES: CleanScope[] = [
+	"skills",
+	"extensions",
+	"prompts",
+	"themes",
+	"configs",
+	"sessions",
+];
+const DEFAULT_SCOPES: CleanScope[] = [
+	"skills",
+	"extensions",
+	"prompts",
+	"themes",
+];
 
 function expandPath(p: string): string {
 	if (p.startsWith("~/")) {
@@ -65,32 +85,76 @@ function getTargets(scopes: CleanScope[]): CleanTarget[] {
 	const targets: CleanTarget[] = [];
 
 	if (scopes.includes("skills")) {
-		targets.push({ path: "~/.agents/skills", label: "Global skill links/dirs", scope: "skills" });
-		targets.push({ path: "~/.pi/.external-skills", label: "External skill git caches", scope: "skills" });
+		targets.push({
+			path: "~/.agents/skills",
+			label: "Global skill links/dirs",
+			scope: "skills",
+		});
+		targets.push({
+			path: "~/.pi/.external-skills",
+			label: "External skill git caches",
+			scope: "skills",
+		});
 	}
 
 	if (scopes.includes("extensions")) {
-		targets.push({ path: "~/.pi/agent/extensions", label: "Global extensions", scope: "extensions" });
+		targets.push({
+			path: "~/.pi/agent/extensions",
+			label: "Global extensions",
+			scope: "extensions",
+		});
 	}
 
 	if (scopes.includes("prompts")) {
-		targets.push({ path: "~/.pi/agent/prompts", label: "Global prompts", scope: "prompts" });
+		targets.push({
+			path: "~/.pi/agent/prompts",
+			label: "Global prompts",
+			scope: "prompts",
+		});
 	}
 
 	if (scopes.includes("themes")) {
-		targets.push({ path: "~/.pi/agent/themes", label: "Global themes", scope: "themes" });
+		targets.push({
+			path: "~/.pi/agent/themes",
+			label: "Global themes",
+			scope: "themes",
+		});
 	}
 
 	if (scopes.includes("configs")) {
-		targets.push({ path: "~/.pi/agent/mcp.json", label: "MCP config", scope: "configs" });
-		targets.push({ path: "~/.pi/agent/AGENTS.md", label: "AGENTS.md", scope: "configs" });
-		targets.push({ path: "~/.pi/agent/settings.json", label: "Settings", scope: "configs" });
-		targets.push({ path: "~/.pi/agent/trust.json", label: "Trust decisions", scope: "configs" });
-		targets.push({ path: "~/.pi/agent/models.json", label: "Custom models", scope: "configs" });
+		targets.push({
+			path: "~/.pi/agent/mcp.json",
+			label: "MCP config",
+			scope: "configs",
+		});
+		targets.push({
+			path: "~/.pi/agent/AGENTS.md",
+			label: "AGENTS.md",
+			scope: "configs",
+		});
+		targets.push({
+			path: "~/.pi/agent/settings.json",
+			label: "Settings",
+			scope: "configs",
+		});
+		targets.push({
+			path: "~/.pi/agent/trust.json",
+			label: "Trust decisions",
+			scope: "configs",
+		});
+		targets.push({
+			path: "~/.pi/agent/models.json",
+			label: "Custom models",
+			scope: "configs",
+		});
 	}
 
 	if (scopes.includes("sessions")) {
-		targets.push({ path: "~/.pi/agent/sessions", label: "Saved sessions", scope: "sessions" });
+		targets.push({
+			path: "~/.pi/agent/sessions",
+			label: "Saved sessions",
+			scope: "sessions",
+		});
 	}
 
 	return targets;
@@ -103,7 +167,10 @@ function getExistingTargets(targets: CleanTarget[]): CleanTarget[] {
 	});
 }
 
-function deleteTarget(target: CleanTarget): { success: boolean; error?: string } {
+function deleteTarget(target: CleanTarget): {
+	success: boolean;
+	error?: string;
+} {
 	const expanded = expandPath(target.path);
 	try {
 		const stat = fs.lstatSync(expanded);
@@ -114,13 +181,17 @@ function deleteTarget(target: CleanTarget): { success: boolean; error?: string }
 		}
 		return { success: true };
 	} catch (err) {
-		return { success: false, error: err instanceof Error ? err.message : String(err) };
+		return {
+			success: false,
+			error: err instanceof Error ? err.message : String(err),
+		};
 	}
 }
 
 export default function cleanCommandExtension(pi: ExtensionAPI) {
 	pi.registerCommand("clean", {
-		description: "Clean pi-related global resources (skills, extensions, prompts, themes, configs, sessions)",
+		description:
+			"Clean pi-related global resources (skills, extensions, prompts, themes, configs, sessions)",
 		handler: async (args, ctx) => {
 			const argv = new Set(args.split(/\s+/).filter(Boolean));
 			const dryRun = argv.has("--dry-run");
@@ -133,7 +204,8 @@ export default function cleanCommandExtension(pi: ExtensionAPI) {
 				selectedScopes = [...ALL_SCOPES];
 			} else {
 				const explicitScopes = ALL_SCOPES.filter((s) => argv.has(`--${s}`));
-				selectedScopes = explicitScopes.length > 0 ? explicitScopes : [...DEFAULT_SCOPES];
+				selectedScopes =
+					explicitScopes.length > 0 ? explicitScopes : [...DEFAULT_SCOPES];
 			}
 
 			// Interactive scope selection when /clean is run bare
@@ -142,10 +214,10 @@ export default function cleanCommandExtension(pi: ExtensionAPI) {
 					value: s,
 					label: `${SCOPES[s].label}: ${SCOPES[s].description}`,
 				}));
-				const picked = await ctx.ui.select("Select cleanup scopes (multi-select not supported; run again for more):", [
-					...choices.map((c) => c.label),
-					"All of the above",
-				]);
+				const picked = await ctx.ui.select(
+					"Select cleanup scopes (multi-select not supported; run again for more):",
+					[...choices.map((c) => c.label), "All of the above"],
+				);
 
 				if (!picked) {
 					ctx.ui.notify("Cleanup cancelled", "info");
@@ -173,12 +245,17 @@ export default function cleanCommandExtension(pi: ExtensionAPI) {
 			const existing = getExistingTargets(targets);
 
 			if (existing.length === 0) {
-				ctx.ui.notify("Nothing to clean. Pi resource directories are already empty.", "info");
+				ctx.ui.notify(
+					"Nothing to clean. Pi resource directories are already empty.",
+					"info",
+				);
 				return;
 			}
 
 			// Preview what will be deleted
-			const preview = existing.map((t) => `  • ${SCOPES[t.scope].label}: ${t.path} (${t.label})`).join("\n");
+			const preview = existing
+				.map((t) => `  • ${SCOPES[t.scope].label}: ${t.path} (${t.label})`)
+				.join("\n");
 			const modeLabel = dryRun ? "[DRY RUN] Would delete" : "Will delete";
 			ctx.ui.notify(`${modeLabel}:\n${preview}`, "info");
 
@@ -188,7 +265,9 @@ export default function cleanCommandExtension(pi: ExtensionAPI) {
 
 			// Confirm unless --yes
 			if (!skipConfirm && ctx.hasUI) {
-				const scopeNames = selectedScopes.map((s) => SCOPES[s].label).join(", ");
+				const scopeNames = selectedScopes
+					.map((s) => SCOPES[s].label)
+					.join(", ");
 				const confirmed = await ctx.ui.confirm(
 					"Confirm destructive cleanup",
 					`Delete all pi ${scopeNames.toLowerCase()} resources? This cannot be undone.`,
@@ -208,8 +287,13 @@ export default function cleanCommandExtension(pi: ExtensionAPI) {
 				ctx.ui.notify(`Cleaned ${succeeded.length} resource(s)`, "success");
 			}
 			if (failed.length > 0) {
-				const errors = failed.map((r) => `  • ${r.target.path}: ${r.error}`).join("\n");
-				ctx.ui.notify(`Failed to clean ${failed.length} resource(s):\n${errors}`, "error");
+				const errors = failed
+					.map((r) => `  • ${r.target.path}: ${r.error}`)
+					.join("\n");
+				ctx.ui.notify(
+					`Failed to clean ${failed.length} resource(s):\n${errors}`,
+					"error",
+				);
 			}
 		},
 	});
