@@ -96,6 +96,36 @@
           "maxTokens": 131072
         }
       ]
+    },
+    "qwen": {
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "api": "openai-completions",
+      "apiKey": "sk-60a13f04e4154a3c8dab34e1b2d24025",
+      "models": [
+        {
+          "api": "openai-completions",
+          "apiKey": "sk-60a13f04e4154a3c8dab34e1b2d24025",
+          "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+          "compat": {
+            "supportsDeveloperRole": false,
+            "thinkingFormat": "openrouter"
+          },
+          "contextWindow": 1000000,
+          "cost": {
+            "cacheRead": 0.25,
+            "cacheWrite": 1.5625,
+            "input": 1.25,
+            "output": 3.75
+          },
+          "id": "qwen3.7-max",
+          "input": ["text"],
+          "maxTokens": 65536,
+          "name": "Qwen: Qwen3.7 Max",
+          "provider": "openrouter",
+          "reasoning": true,
+          "thinkingLevel": "medium"
+        }
+      ]
     }
   }
 }
