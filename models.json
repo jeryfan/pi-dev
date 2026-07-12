@@ -39,7 +39,7 @@
           "name": "DeepSeek V4 Pro",
           "api": "openai-completions",
           "provider": "deepseek",
-          "baseUrl": "",
+          "baseUrl": "https://api.iamhc.cn/v1",
           "compat": {
             "supportsStore": false,
             "supportsDeveloperRole": false,
@@ -69,7 +69,7 @@
           "name": "GLM-5.2",
           "api": "openai-completions",
           "provider": "zai",
-          "baseUrl": "",
+          "baseUrl": "https://api.iamhc.cn/v1",
           "compat": {
             "supportsStore": false,
             "supportsDeveloperRole": false,
