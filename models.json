@@ -76,6 +76,9 @@
       "baseUrl": "https://anyrouter.top",
       "api": "anthropic-messages",
       "apiKey": "",
+      "headers": {
+        "anthropic-beta": "context-1m-2025-08-07"
+      },
       "models": [
         {
           "id": "claude-fable-5[1m]",
