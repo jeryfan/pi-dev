@@ -6,8 +6,8 @@
       "apiKey": "",
       "models": [
         {
-          "id": "gpt-5.5",
-          "name": "GPT-5.5",
+          "id": "gpt-5.6-sol",
+          "name": "GPT-5.6 Sol",
           "api": "openai-responses",
           "provider": "openai",
           "baseUrl": "https://anyrouter.top/v1",
@@ -15,96 +15,41 @@
           "thinkingLevelMap": {
             "off": "none",
             "xhigh": "xhigh",
-            "minimal": null
+            "max": "max"
+          },
+          "compat": {
+            "supportsToolSearch": true
           },
           "input": ["text", "image"],
           "cost": {
             "input": 5,
             "output": 30,
             "cacheRead": 0.5,
-            "cacheWrite": 0
+            "cacheWrite": 6.25,
+            "tiers": [
+              {
+                "inputTokensAbove": 272000,
+                "input": 10,
+                "output": 45,
+                "cacheRead": 1,
+                "cacheWrite": 12.5
+              }
+            ]
           },
-          "contextWindow": 272000,
+          "contextWindow": 1050000,
           "maxTokens": 128000
         }
       ]
     },
-    "others": {
-      "baseUrl": "https://api.iamhc.cn/v1",
-      "api": "openai-completions",
-      "apiKey": "sk-WA8mQsfT4MwHjWT1l1nZlBkTi1iXSgHywUd3OUSD2E4fHqO7",
-      "models": [
-        {
-          "id": "deepseek-v4-pro",
-          "name": "DeepSeek V4 Pro",
-          "api": "openai-completions",
-          "provider": "deepseek",
-          "baseUrl": "https://api.iamhc.cn/v1",
-          "compat": {
-            "supportsStore": false,
-            "supportsDeveloperRole": false,
-            "requiresReasoningContentOnAssistantMessages": true,
-            "thinkingFormat": "deepseek"
-          },
-          "reasoning": true,
-          "thinkingLevelMap": {
-            "minimal": null,
-            "low": null,
-            "medium": null,
-            "high": "high",
-            "max": "max"
-          },
-          "input": ["text"],
-          "cost": {
-            "input": 0.435,
-            "output": 0.87,
-            "cacheRead": 0.003625,
-            "cacheWrite": 0
-          },
-          "contextWindow": 1000000,
-          "maxTokens": 384000
-        },
-        {
-          "id": "glm-5.2",
-          "name": "GLM-5.2",
-          "api": "openai-completions",
-          "provider": "zai",
-          "baseUrl": "https://api.iamhc.cn/v1",
-          "compat": {
-            "supportsStore": false,
-            "supportsDeveloperRole": false,
-            "supportsReasoningEffort": true,
-            "thinkingFormat": "zai",
-            "zaiToolStream": true
-          },
-          "reasoning": true,
-          "thinkingLevelMap": {
-            "minimal": null,
-            "low": "high",
-            "medium": "high",
-            "high": "high",
-            "max": "max"
-          },
-          "input": ["text"],
-          "cost": {
-            "input": 0,
-            "output": 0,
-            "cacheRead": 0,
-            "cacheWrite": 0
-          },
-          "contextWindow": 1000000,
-          "maxTokens": 131072
-        }
-      ]
-    },
+
     "qwen": {
       "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
       "api": "openai-completions",
-      "apiKey": "sk-60a13f04e4154a3c8dab34e1b2d24025",
+      "apiKey": "",
       "models": [
         {
           "api": "openai-completions",
-          "apiKey": "sk-60a13f04e4154a3c8dab34e1b2d24025",
+          "apiKey": "",
           "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
           "compat": {
             "supportsDeveloperRole": false,
@@ -124,6 +69,55 @@
           "provider": "openrouter",
           "reasoning": true,
           "thinkingLevel": "medium"
+        }
+      ]
+    },
+    "anyrouter-anthropic": {
+      "baseUrl": "https://anyrouter.top",
+      "api": "anthropic-messages",
+      "apiKey": "",
+      "models": [
+        {
+          "id": "claude-fable-5",
+          "name": "Claude Fable 5",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "xhigh": "xhigh",
+            "max": "max"
+          },
+          "input": ["text", "image"],
+          "contextWindow": 1000000,
+          "maxTokens": 128000,
+          "cost": {
+            "input": 10,
+            "output": 50,
+            "cacheRead": 1,
+            "cacheWrite": 12.5
+          },
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
+        },
+        {
+          "id": "claude-opus-4-8",
+          "name": "Claude Opus 4.8",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "xhigh": "xhigh",
+            "max": "max"
+          },
+          "input": ["text", "image"],
+          "contextWindow": 1000000,
+          "maxTokens": 128000,
+          "cost": {
+            "input": 5,
+            "output": 25,
+            "cacheRead": 0.5,
+            "cacheWrite": 6.25
+          },
+          "compat": {
+            "forceAdaptiveThinking": true
+          }
         }
       ]
     }
