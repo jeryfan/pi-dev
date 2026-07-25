@@ -11,20 +11,29 @@
     "extensions": [
       "./extensions",
       "node_modules/pi-rewind/src/index.ts",
-      "node_modules/pi-web-access/index.ts"
+      "node_modules/pi-web-access/index.ts",
+      "node_modules/pi-mcp-adapter/index.ts",
+      "node_modules/context-mode/build/adapters/pi/extension.js",
+      "node_modules/pi-subagents/index.ts"
     ],
     "skills": [
-      "./skills"
+      "./skills",
+      "node_modules/context-mode/skills",
+      "node_modules/pi-subagents/skills"
     ],
     "prompts": [
-      "./prompts"
+      "./prompts",
+      "node_modules/pi-subagents/prompts"
     ],
     "themes": [
       "./themes"
     ]
   },
   "dependencies": {
+    "context-mode": "^1.0.169",
+    "pi-mcp-adapter": "^2.13.0",
     "pi-rewind": "^0.5.0",
+    "pi-subagents": "^0.36.0",
     "pi-web-access": "^0.13.0"
   },
   "scripts": {
@@ -37,6 +46,9 @@
     "@biomejs/biome": "^2.5.3"
   },
   "bundleDependencies": [
+    "pi-mcp-adapter",
+    "context-mode",
+    "pi-subagents",
     "pi-web-access"
   ]
 }
