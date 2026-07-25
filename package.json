@@ -11,19 +11,10 @@
     "extensions": [
       "./extensions",
       "node_modules/pi-rewind/src/index.ts",
-      "node_modules/pi-web-access/index.ts",
-      "node_modules/superpowers-zh/.pi/extensions/superpowers.ts",
-      "node_modules/pi-chrome/extensions/chrome-profile-bridge/index.ts",
-      "node_modules/pi-mcp-adapter/index.ts",
-      "node_modules/statusline-pi/dist/index.js",
-      "node_modules/pi-subagents/src/extension/index.ts",
-      "node_modules/pi-agent-goal/extensions/index.ts"
+      "node_modules/pi-web-access/index.ts"
     ],
     "skills": [
-      "./skills",
-      "node_modules/pi-playwright/skills",
-      "node_modules/superpowers-zh/skills",
-      "node_modules/pi-subagents/skills"
+      "./skills"
     ],
     "prompts": [
       "./prompts"
@@ -33,15 +24,8 @@
     ]
   },
   "dependencies": {
-    "pi-agent-goal": "github:KristjanPikhof/Pi-Agent-Goal",
-    "pi-chrome": "^0.15.46",
-    "pi-mcp-adapter": "^2.11.0",
-    "pi-playwright": "^0.1.1",
     "pi-rewind": "^0.5.0",
-    "pi-subagents": "^0.34.0",
-    "pi-web-access": "^0.13.0",
-    "statusline-pi": "^1.0.0",
-    "superpowers-zh": "^1.6.0"
+    "pi-web-access": "^0.13.0"
   },
   "scripts": {
     "postinstall": "node scripts/setup-skills.js",
@@ -53,14 +37,6 @@
     "@biomejs/biome": "^2.5.3"
   },
   "bundleDependencies": [
-    "pi-rewind",
-    "pi-web-access",
-    "pi-playwright",
-    "pi-chrome",
-    "pi-mcp-adapter",
-    "statusline-pi",
-    "pi-subagents",
-    "pi-agent-goal",
-    "superpowers-zh"
+    "pi-web-access"
   ]
 }
