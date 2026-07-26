@@ -68,11 +68,11 @@ syncAgentsMd();
 
 function syncAgentsMd() {
   const packageRoot = path.join(__dirname, "..");
-  const source = path.join(packageRoot, "AGENTS.md");
+  const source = path.join(packageRoot, "global", "AGENTS.md");
   const target = path.join(piAgentDir, "AGENTS.md");
 
   if (!fs.existsSync(source)) {
-    console.log("[setup-skills] No AGENTS.md found, skipping AGENTS.md sync");
+    console.log("[setup-skills] No global/AGENTS.md found, skipping AGENTS.md sync");
     return;
   }
 

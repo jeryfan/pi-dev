@@ -19,7 +19,8 @@ pi-dev/
 │   └── setup-skills.js  # postinstall：同步全局配置、安装外部 git skills
 ├── package.json         # pi-package 配置
 ├── mcp.json             # MCP 服务器配置，同步到 ~/.pi/agent/mcp.json
-├── AGENTS.md            # 通用行为指南，同步到 ~/.pi/agent/AGENTS.md
+├── global/AGENTS.md     # 通用行为准则，同步到 ~/.pi/agent/AGENTS.md
+├── AGENTS.md            # 本项目上下文（供 agent 阅读，不同步）
 ├── biome.json           # Biome 格式化与 lint 配置
 └── README.md            # 本文件
 ```
@@ -165,7 +166,7 @@ npx playwright install chromium
 - `workflow: "none"` — `pi-web-access` 搜索时不打开浏览器策展器，直接返回文本结果
 - 如需开启策展器：`/curator on`
 - `mcp.json` 会覆盖同步到 `~/.pi/agent/mcp.json`
-- `AGENTS.md` 会覆盖同步到 `~/.pi/agent/AGENTS.md`
+- `global/AGENTS.md` 会覆盖同步到 `~/.pi/agent/AGENTS.md`（项目根的 `AGENTS.md` 是本项目上下文，不同步）
 
 ## 添加新组件
 
@@ -278,8 +279,8 @@ npm run format     # 格式化
 
 ## Agent 行为规范（必读）
 
-详见 [`AGENTS.md`](./AGENTS.md)。核心原则：
+详见 [`global/AGENTS.md`](./global/AGENTS.md)（postinstall 时同步到 `~/.pi/agent/AGENTS.md`，对全局所有项目生效）。核心原则：
 
-- **在未明确要求提交代码时，不要自主执行 `git commit` 或 `git push`**。
-- 修改文件后，先向用户展示改动摘要，等待明确指令再执行版本控制操作。
-- `git add` 等本地 staging 操作也应在用户确认后进行，除非用户已明确授权批量提交。
+- **安全红线不可违反**：未经明确要求不执行 `git commit` / `git push`，破坏性命令先确认。
+- **小决策自主，大决策请示**：实现细节自行判断，需求歧义或方案分叉时停下来问。
+- **最小实现，精准修改**：每行改动都能追溯到用户需求，不重构没坏的东西。
