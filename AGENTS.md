@@ -22,7 +22,7 @@ npm run postinstall  # 手动触发全局同步（见下方"同步机制"）
 
 ```
 pi-dev/
-├── extensions/          # 自定义 pi 扩展（/clear、/exit、/plan 只读探索模式）
+├── extensions/          # 自定义 pi 扩展（/clear、/exit、/clean）
 ├── global/AGENTS.md     # 通用行为准则，同步到 ~/.pi/agent/AGENTS.md
 ├── scripts/setup-skills.js  # postinstall 同步脚本
 ├── mcp.json             # MCP 服务器配置，同步到 ~/.pi/agent/mcp.json

@@ -9,9 +9,7 @@ pi-dev/
 ├── extensions/          # 自定义扩展
 │   ├── clear-command.ts # /clear 命令，快速新建会话
 │   ├── exit-command.ts  # /exit 命令，退出 pi
-│   └── plan-mode/       # /plan 只读探索模式
-│       ├── index.ts
-│       └── utils.ts
+│   └── clean-command.ts # /clean 命令，清理 pi 全局资源
 ├── skills/              # 本地技能（当前为空，预留）
 ├── prompts/             # 提示模板（当前为空，预留）
 ├── themes/              # 主题（当前为空，预留）
@@ -41,7 +39,8 @@ pi-dev/
 | 上下文管理 | [context-mode](https://github.com/mksglu/context-mode) | 沙箱执行、FTS5 知识库、意图搜索 |
 | Subagent 编排 | [pi-subagents](https://github.com/nicobailon/pi-subagents) | 并行/链式 subagent、异步执行 |
 | 目标跟踪 | [pi-agent-goal](https://github.com/KristjanPikhof/Pi-Agent-Goal) | Codex 风格 `/goal` 长期目标工作流 |
-| 自定义命令 | `extensions/` | `/clear`、`/exit`、`/plan` |
+| 自定义命令 | `extensions/` | `/clear`、`/exit`、`/clean` |
+| 计划模式 | [@narumitw/pi-plan-mode](https://github.com/narumiruna/pi-extensions) | Codex 风格 `/plan`：只读探索、结构化计划、导出实施 |
 
 ### Skills
 
@@ -51,7 +50,7 @@ pi-dev/
 | 前端设计 | [frontend-design](https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design) | Anthropic 官方，避免 AI slop 审美 |
 | 上下文管理 | context-mode/skills | ctx_* 工具使用指南 |
 | Subagent 使用 | pi-subagents/skills | subagent 编排指南 |
-| Playwright 浏览器 | pi-playwright/skills | 浏览器自动化 skill |
+| 浏览器自动化 | [@playwright/cli](https://github.com/microsoft/playwright-cli)/skills | CLI + skill，token 高效浏览器自动化 |
 | 工作流技能 | pi-superpowers/skills | 头脑风暴、计划、TDD、调试、审查 |
 
 ## 安装
@@ -156,8 +155,7 @@ npx playwright install chromium
 | `/clear` | 新建会话（同 `/new`） |
 | `/exit` | 退出 pi |
 | `/clean` | 清理 pi 全局资源（skills、extensions、prompts、themes、configs、sessions） |
-| `/plan` | 切换 plan mode，只读探索 |
-| `/todos` | 显示当前 plan 进度 |
+| `/plan` | Codex 风格计划模式（@narumitw/pi-plan-mode），只读探索、计划导出 |
 | `/goal` | 显示或设置长期目标 |
 | `/mcp` | 查看 MCP 状态 |
 
