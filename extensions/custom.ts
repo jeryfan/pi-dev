@@ -6,7 +6,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 export default function (pi: ExtensionAPI) {
 	pi.registerProvider("custom", {
 		name: "Custom",
-		baseUrl: "https://seekai.cc/v1",
+		baseUrl: "http://localhost:8080/v1",
 		apiKey: "$CUSTOM_API_KEY",
 		api: "openai-completions",
 		models: [
