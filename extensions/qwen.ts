@@ -3,7 +3,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 export default function (pi: ExtensionAPI) {
   pi.registerProvider("bailian", {
     name: "Bailian",
-    baseUrl: "http://new-api.gkm/v1",
+    baseUrl: "http://newapi.gkm/v1",
     apiKey: "$DASHSCOPE_API_KEY",
     api: "openai-completions",
     models: [
