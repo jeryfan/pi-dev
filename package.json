@@ -38,16 +38,16 @@
 		]
 	},
 	"dependencies": {
-		"@narumitw/pi-btw": "^0.52.0",
-		"@narumitw/pi-plan-mode": "^0.49.3",
-		"@playwright/cli": "^0.1.18",
+		"@narumitw/pi-btw": "^0.56.2",
+		"@narumitw/pi-plan-mode": "^0.56.0",
+		"@playwright/cli": "^0.1.19",
 		"context-mode": "^1.0.169",
-		"pi-mcp-adapter": "^2.13.0",
+		"pi-mcp-adapter": "^2.32.1",
 		"pi-review-loop": "^0.4.4",
 		"pi-rewind": "^0.5.0",
-		"pi-subagents": "^0.49.0",
-		"pi-web-access": "^0.22.0",
-		"visual-explainer": "^0.9.0"
+		"pi-subagents": "^0.64.0",
+		"pi-web-access": "^0.27.0",
+		"visual-explainer": "^0.11.0"
 	},
 	"scripts": {
 		"postinstall": "node scripts/setup-skills.js",
@@ -56,7 +56,7 @@
 		"format": "biome format --write ."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.3"
+		"@biomejs/biome": "^2.5.12"
 	},
 	"bundleDependencies": [
 		"pi-mcp-adapter",
