@@ -30,6 +30,11 @@ const externalSkills = [
 		repo: "https://github.com/anthropics/claude-code.git",
 		sourceSubdir: "plugins/frontend-design/skills/frontend-design",
 	},
+	{
+		name: "diagram-design",
+		repo: "https://github.com/cathrynlavery/diagram-design.git",
+		sourceSubdir: "skills/diagram-design",
+	},
 ];
 
 // 同步 MCP 配置到全局，使安装 pi-dev 后任意项目都能使用 MCP 工具
